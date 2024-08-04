@@ -8,6 +8,7 @@ import { Prisma } from '@prisma/client';
 import { HTTPERROR } from 'src/common/enum/http-error.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { md5 } from 'src/utils/md5';
+import { UserLoginDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,7 @@ export class UserService {
     });
 
     if (existUser) {
-      throw new BadRequestException(HTTPERROR.USERX_EXIST);
+      throw new BadRequestException(HTTPERROR.USER_EXIST);
     }
 
     try {
@@ -33,5 +34,23 @@ export class UserService {
       this.logger.error(error, UserService);
       return null;
     }
+  }
+
+  async login(userLoginDto: UserLoginDto) {
+    const existUser = await this.prisma.user.findUnique({
+      where: { username: userLoginDto.username },
+    });
+
+    if (!existUser) {
+      throw new BadRequestException(HTTPERROR.USER_NOT_EXIST);
+    }
+
+    const cryptoPwd = md5(userLoginDto.password);
+    if (existUser.password !== cryptoPwd) {
+      throw new BadRequestException(HTTPERROR.USERNAME_OR_PASSWORD_ERROR);
+    }
+
+    delete existUser.password;
+    return existUser;
   }
 }

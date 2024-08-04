@@ -14,3 +14,11 @@ export class RegisterUserDto {
   @IsEmail({})
   email: string;
 }
+
+export class UserLoginDto {
+  @IsNotEmpty()
+  username: string;
+
+  @IsNotEmpty()
+  password: string;
+}
