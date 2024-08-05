@@ -1,7 +1,7 @@
-import { Controller } from '@nestjs/common';
+import { WebSocketGateway } from '@nestjs/websockets';
 import { ChatService } from './chat.service';
 
-@Controller('chat')
-export class ChatController {
+@WebSocketGateway()
+export class ChatGateway {
   constructor(private readonly chatService: ChatService) {}
 }
