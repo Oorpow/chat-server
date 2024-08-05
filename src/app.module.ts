@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { FriendshipModule } from './friendship/friendship.module';
+import { ChatroomModule } from './chatroom/chatroom.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { AuthGuard } from './auth/auth.guard';
         };
       },
     }),
+    FriendshipModule,
+    ChatroomModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],
