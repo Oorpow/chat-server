@@ -13,11 +13,12 @@ export const RequiredLogin = () => SetMetadata(AUTH_GUARD_KEY, true);
  * 获取用户信息的装饰器
  * @returns
  */
-export const UserInfo = () =>
-  createParamDecorator((data: string, ctx: ExecutionContext) => {
+export const UserInfo = createParamDecorator(
+  (data: string, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<Request>();
     if (!request.user) {
       return null;
     }
     return data ? request.user[data] : request.user;
-  });
+  },
+);
