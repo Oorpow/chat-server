@@ -58,7 +58,7 @@ export class FriendshipController {
     @Body() agreeFriendReqDto: AgreeFriendReqDto,
     @UserInfo('userId') userId: number,
   ) {
-    return this.friendshipService.agreeFriendRequest(
+    return this.friendshipService.rejectFriendRequest(
       agreeFriendReqDto.fromUserId,
       userId,
     );
