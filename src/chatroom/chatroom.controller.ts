@@ -20,6 +20,12 @@ import {
 export class ChatroomController {
   constructor(private readonly chatroomService: ChatroomService) {}
 
+  /**
+   * 创建私聊
+   * @param createSingleChatroomDto
+   * @param userId
+   * @returns
+   */
   @Post('create/single')
   async createSingle(
     @Body() createSingleChatroomDto: CreateSingleChatroomDto,
@@ -48,7 +54,7 @@ export class ChatroomController {
   }
 
   /**
-   * 查询自己参与的所有群聊，并显示每个群聊的用户数
+   * 查询自己参与的所有聊天，并显示用户数
    * @param userId
    * @returns
    */
@@ -83,6 +89,12 @@ export class ChatroomController {
     return this.chatroomService.joinGroup(joinGroupDto.chatroomId, userId);
   }
 
+  /**
+   * 退出群聊
+   * @param quitGroupDto
+   * @param userId
+   * @returns
+   */
   @Post('group/quit')
   async quitGroup(
     @Body() quitGroupDto: QuitGroupDto,

@@ -5,6 +5,11 @@ import { ChatHistoryService } from './chat-history.service';
 export class ChatHistoryController {
   constructor(private readonly chatHistoryService: ChatHistoryService) {}
 
+  /**
+   * 查询聊天记录
+   * @param chatroomId 聊天室id
+   * @returns
+   */
   @Get('list')
   async list(@Query('chatroomId', ParseIntPipe) chatroomId: number) {
     return this.chatHistoryService.list(chatroomId);

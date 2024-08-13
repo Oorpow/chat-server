@@ -34,13 +34,22 @@ export class FriendshipController {
     return this.friendshipService.getFriends(userId);
   }
 
-  // 获取好友请求列表
+  /**
+   * 获取好友申请列表
+   * @param userId
+   * @returns
+   */
   @Get('list')
   async list(@UserInfo('userId') userId: number) {
     return this.friendshipService.list(userId);
   }
 
-  // 同意好友申请，并添加好友关系
+  /**
+   * 同意好友请求，添加好友关系
+   * @param agreeFriendReqDto
+   * @param userId
+   * @returns
+   */
   @Post('agree')
   async agreeFriendRequest(
     @Body() agreeFriendReqDto: AgreeFriendReqDto,
@@ -52,7 +61,12 @@ export class FriendshipController {
     );
   }
 
-  // 拒绝好友请求
+  /**
+   * 拒绝好友请求
+   * @param agreeFriendReqDto
+   * @param userId
+   * @returns
+   */
   @Post('reject')
   async rejectFriendRequest(
     @Body() agreeFriendReqDto: AgreeFriendReqDto,
@@ -64,7 +78,12 @@ export class FriendshipController {
     );
   }
 
-  // 删除好友
+  /**
+   * 删除好友
+   * @param removeFriendDto
+   * @param userId
+   * @returns
+   */
   @Post('remove')
   async removeFriend(
     @Body() removeFriendDto: RemoveFriendReqDto,

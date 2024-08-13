@@ -34,7 +34,7 @@ export class ChatGateway {
   @WebSocketServer() server: Server;
 
   /**
-   * 加入聊天室
+   * 加入聊天室 （广播，显示xx加入了聊天室）
    * @param client
    * @param payload
    */
