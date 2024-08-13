@@ -47,6 +47,7 @@ model FriendRequest {
   fromUserId Int
   // 接收方id
   toUserId Int
+  // 好友申请的理由
   reason String @db.VarChar(100)
   // 状态, 0 pending, 1 agree, 2 reject
   status Int
