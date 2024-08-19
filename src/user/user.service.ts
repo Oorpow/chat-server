@@ -53,4 +53,15 @@ export class UserService {
     delete existUser.password;
     return existUser;
   }
+
+  async authInfo(uid: number) {
+    const existUser = await this.prisma.user.findUnique({
+      where: { id: uid },
+    });
+    if (!existUser) {
+      throw new BadRequestException(HTTPERROR.USER_NOT_EXIST);
+    }
+    delete existUser.password;
+    return existUser;
+  }
 }

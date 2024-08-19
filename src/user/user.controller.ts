@@ -1,7 +1,9 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
 import { UserService } from './user.service';
 import { RegisterUserDto, UserLoginDto } from './dto/user.dto';
-import { JwtService } from '@nestjs/jwt';
+import { RequiredLogin, UserInfo } from 'src/common/decorator';
 
 @Controller('user')
 export class UserController {
@@ -30,5 +32,12 @@ export class UserController {
     );
 
     return token;
+  }
+
+  // 生成一个接口，用于获取登录用户的基本信息
+  @RequiredLogin()
+  @Get('auth')
+  async authInfo(@UserInfo('userId') userId: number) {
+    return this.userService.authInfo(userId);
   }
 }
