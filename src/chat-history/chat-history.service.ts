@@ -17,7 +17,7 @@ export class ChatHistoryService {
       const chatMsgItem = chatMsgList[i];
       const user = await this.prisma.user.findUnique({
         where: { id: chatMsgItem.fromUserId },
-        select: { id: true, username: true, nickname: true },
+        select: { id: true, username: true },
       });
       result.push({ ...chatMsgItem, user });
     }
