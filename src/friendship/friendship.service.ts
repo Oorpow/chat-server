@@ -38,6 +38,13 @@ export class FriendshipService {
           in: friendIds,
         },
       },
+      select: {
+        id: true,
+        username: true,
+        avatar: true,
+        createTime: true,
+        updateTime: true,
+      },
     });
   }
 
@@ -109,5 +116,36 @@ export class FriendshipService {
     });
 
     return '删除成功';
+  }
+
+  async searchByUsername(username: string, uid: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: uid,
+      },
+      include: {
+        friends: true,
+      },
+    });
+
+    const friendIds = user.friends.map((item) => item.friendId);
+
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          in: friendIds,
+        },
+        username: {
+          contains: username,
+        },
+      },
+      select: {
+        id: true,
+        username: true,
+        avatar: true,
+        createTime: true,
+        updateTime: true,
+      },
+    });
   }
 }

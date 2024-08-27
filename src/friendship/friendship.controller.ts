@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import { RequiredLogin, UserInfo } from 'src/common/decorator';
 import {
@@ -42,6 +42,14 @@ export class FriendshipController {
   @Get('list')
   async list(@UserInfo('userId') userId: number) {
     return this.friendshipService.list(userId);
+  }
+
+  @Get('search')
+  async searchByUsername(
+    @Query('username') username: string,
+    @UserInfo('userId') userId: number,
+  ) {
+    return this.friendshipService.searchByUsername(username, userId);
   }
 
   /**
