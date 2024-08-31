@@ -8,9 +8,16 @@ export class ChatroomService {
   private prisma: PrismaService;
 
   async createSingle(friendId: number, uid: number) {
+    // chatname 改成对方用户的用户名
+    const { username } = await this.prisma.user.findUnique({
+      where: { id: friendId },
+      select: {
+        username: true,
+      },
+    });
     const { id } = await this.prisma.chatroom.create({
       data: {
-        name: `chat_${Date.now()}`,
+        name: `${username}`,
         type: false,
       },
       select: {
