@@ -54,7 +54,7 @@ export class ChatroomController {
   }
 
   /**
-   * 查询自己参与的所有聊天，并显示用户数
+   * 查询自己参与的所有聊天（私聊、群聊），并显示用户数
    * @param userId
    * @returns
    */
@@ -101,5 +101,13 @@ export class ChatroomController {
     @UserInfo('userId') userId: number,
   ) {
     return this.chatroomService.quitGroup(quitGroupDto.chatroomId, userId);
+  }
+
+  @Get('find/chat')
+  async findChat(
+    @Query('friendId', ParseIntPipe) friendId: number,
+    @UserInfo('userId') userId: number,
+  ) {
+    return this.chatroomService.findChat(friendId, userId);
   }
 }

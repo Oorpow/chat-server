@@ -64,4 +64,15 @@ export class UserService {
     delete existUser.password;
     return existUser;
   }
+
+  async getUserById(id: number) {
+    return await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        username: true,
+        avatar: true,
+      },
+    });
+  }
 }

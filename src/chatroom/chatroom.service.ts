@@ -8,16 +8,9 @@ export class ChatroomService {
   private prisma: PrismaService;
 
   async createSingle(friendId: number, uid: number) {
-    // chatname 改成对方用户的用户名
-    const { username } = await this.prisma.user.findUnique({
-      where: { id: friendId },
-      select: {
-        username: true,
-      },
-    });
     const { id } = await this.prisma.chatroom.create({
       data: {
-        name: `${username}`,
+        name: `chat_${new Date().getTime()}`,
         type: false,
       },
       select: {
@@ -38,7 +31,7 @@ export class ChatroomService {
       },
     });
 
-    return '私聊创建成功';
+    return id;
   }
 
   async createGroup(name: string, uid: number) {
@@ -86,6 +79,17 @@ export class ChatroomService {
           userId: true,
         },
       });
+
+      // 私聊的情况下，将聊天室的name替换成对方用户的名称
+      if (!groupItem.type) {
+        const user = await this.prisma.user.findUnique({
+          where: {
+            // 私聊的情况下，userIds理应只有2个，排掉自身id后，剩下的就是对方用户的id
+            id: userIds.filter((item) => item.userId !== uid)[0].userId,
+          },
+        });
+        groupItem.name = user.username;
+      }
       result.push({
         ...groupItem,
         userNums: userIds.length,
@@ -156,5 +160,36 @@ export class ChatroomService {
     });
 
     return '退出群聊成功';
+  }
+
+  async findChat(friendId: number, uid: number) {
+    const currentUserInChats = await this.prisma.userChatroom.findMany({
+      where: { userId: uid },
+    });
+
+    const friendInChats = await this.prisma.userChatroom.findMany({
+      where: { userId: friendId },
+    });
+
+    let result;
+    // 取交集
+    for (let i = 0; i < currentUserInChats.length; i++) {
+      const chatroom = await this.prisma.chatroom.findFirst({
+        where: { id: currentUserInChats[i].chatroomId },
+      });
+      // 过滤掉群聊
+      if (chatroom.type) {
+        continue;
+      }
+      const found = friendInChats.find(
+        (item) => item.chatroomId === chatroom.id,
+      );
+      if (found) {
+        result = found.chatroomId;
+        break;
+      }
+    }
+
+    return result;
   }
 }
