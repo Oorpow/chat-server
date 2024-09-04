@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -103,11 +104,23 @@ export class ChatroomController {
     return this.chatroomService.quitGroup(quitGroupDto.chatroomId, userId);
   }
 
-  @Get('find/chat')
-  async findChat(
+  /**
+   * 查看当前用户与对方是否存在私聊聊天室
+   * @param friendId
+   * @param userId
+   * @returns
+   */
+  @Get('find/single')
+  async findExistChat(
     @Query('friendId', ParseIntPipe) friendId: number,
     @UserInfo('userId') userId: number,
   ) {
-    return this.chatroomService.findChat(friendId, userId);
+    return this.chatroomService.findExistChat(friendId, userId);
+  }
+
+  // 查找聊天室的信息
+  @Get('find/:id')
+  async findChatroom(@Param('id', ParseIntPipe) id: number) {
+    return this.chatroomService.findChatroom(id);
   }
 }

@@ -31,7 +31,9 @@ export class ChatroomService {
       },
     });
 
-    return id;
+    return {
+      chatroomId: id,
+    };
   }
 
   async createGroup(name: string, uid: number) {
@@ -162,7 +164,7 @@ export class ChatroomService {
     return '退出群聊成功';
   }
 
-  async findChat(friendId: number, uid: number) {
+  async findExistChat(friendId: number, uid: number) {
     const currentUserInChats = await this.prisma.userChatroom.findMany({
       where: { userId: uid },
     });
@@ -190,6 +192,14 @@ export class ChatroomService {
       }
     }
 
-    return result;
+    return {
+      chatroomId: result,
+    };
+  }
+
+  async findChatroom(id: number) {
+    return await this.prisma.chatroom.findUnique({
+      where: { id },
+    });
   }
 }
